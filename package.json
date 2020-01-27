@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "commander": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.5.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  }
+}
