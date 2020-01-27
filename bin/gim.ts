@@ -29,18 +29,21 @@ program.version("0.1.0");
 program.command("status").action(async () => {
   const status = await git.status();
   console.log(status);
-  inquirer
-    .prompt([
-      {
-        type: "checkbox",
-        name: "reptiles",
-        message: `${status.files.length} changed files`,
-        choices: status.files.map(file => file.path)
-      }
-    ])
-    .then(answers => {
-      console.info("Answer:", answers.reptiles);
-    });
+
+  if (status.files.length != 0) {
+    inquirer
+      .prompt([
+        {
+          type: "checkbox",
+          name: "reptiles",
+          message: `${status.files.length} changed files`,
+          choices: status.files.map(file => file.path)
+        }
+      ])
+      .then(answers => {
+        console.info("Answer:", answers.reptiles);
+      });
+  }
 });
 
 program.parse(process.argv);
