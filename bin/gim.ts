@@ -3,6 +3,7 @@
 import * as commander from "commander";
 import * as inquirer from "inquirer";
 import * as simplegit from "simple-git/promise";
+import * as chalk from "chalk";
 
 const program = new commander.Command();
 const git = simplegit();
@@ -39,6 +40,15 @@ type Choice = {
   checked: boolean;
 };
 
+const changeWorkdirCharactor = (workingDir: string) => {
+  switch (workingDir) {
+    case "M":
+      return chalk.yellow("");
+    default:
+      console.log(workingDir);
+  }
+};
+
 program.command("status").action(async () => {
   const status = await git.status(),
     cols: number = Number(await execShellCommand("tput cols"));
@@ -54,9 +64,10 @@ program.command("status").action(async () => {
           choices: status.files.map(
             file =>
               <Choice>{
-                name: `${spacePadding(file.path, cols - 10)}${
-                  file.working_dir
-                }`,
+                name: `${spacePadding(
+                  file.path,
+                  cols - 10
+                )}${changeWorkdirCharactor(file.working_dir)}`,
                 checked: true
               }
           )
