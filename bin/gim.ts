@@ -24,11 +24,19 @@ const execShellCommand = (cmd: string) => {
   });
 };
 
+const spacePadding = (val: string, len: number) => {
+  for (let i = 0; i < len; i++) {
+    val = val + " ";
+  }
+
+  return val.substr(0, len);
+};
+
 program.version("0.1.0");
 
 program.command("status").action(async () => {
-  const status = await git.status();
-  console.log(status);
+  const status = await git.status(),
+    cols: number = Number(await execShellCommand("tput cols"));
 
   if (status.files.length != 0) {
     inquirer
@@ -37,7 +45,9 @@ program.command("status").action(async () => {
           type: "checkbox",
           name: "reptiles",
           message: `${status.files.length} changed files`,
-          choices: status.files.map(file => file.path)
+          choices: status.files.map(
+            file => `${spacePadding(file.path, cols - 10)}${file.working_dir}`
+          )
         }
       ])
       .then(answers => {
