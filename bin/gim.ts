@@ -34,6 +34,11 @@ const spacePadding = (val: string, len: number) => {
 
 program.version("0.1.0");
 
+type Choice = {
+  name: string;
+  checked: boolean;
+};
+
 program.command("status").action(async () => {
   const status = await git.status(),
     cols: number = Number(await execShellCommand("tput cols"));
@@ -46,7 +51,13 @@ program.command("status").action(async () => {
           name: "reptiles",
           message: `${status.files.length} changed files`,
           choices: status.files.map(
-            file => `${spacePadding(file.path, cols - 10)}${file.working_dir}`
+            file =>
+              <Choice>{
+                name: `${spacePadding(file.path, cols - 10)}${
+                  file.working_dir
+                }`,
+                checked: true
+              }
           )
         }
       ])
