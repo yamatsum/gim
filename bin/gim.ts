@@ -42,6 +42,7 @@ type Choice = {
 program.command("status").action(async () => {
   const status = await git.status(),
     cols: number = Number(await execShellCommand("tput cols"));
+  console.log(status);
 
   if (status.files.length != 0) {
     inquirer
@@ -61,8 +62,17 @@ program.command("status").action(async () => {
           )
         }
       ])
-      .then(answers => {
-        console.info("Answer:", answers.reptiles);
+      .then(async answers => {
+        console.log(
+          answers.reptiles.map((answer: string) => {
+            return answer.slice(0, -1).replace(/ /g, "");
+          })
+        );
+        // await git.add(
+        //   answers.reptiles.map((answer: string) => {
+        //     return answer.slice(0, -1).replace(/ /g, "");
+        //   })
+        // );
       });
   }
 });
