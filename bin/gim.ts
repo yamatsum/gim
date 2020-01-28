@@ -45,6 +45,12 @@ const changeWorkdirCharactor = (workingDir: string) => {
   }
 };
 
+program.command("a").action(async () => {
+  await execShellCommand(
+    'tmux split-window "node -r ts-node/register bin/gim.ts status;read;tmux wait-for -S gim-status";tmux wait-for gim-status'
+  );
+});
+
 program.command("status").action(async () => {
   const status = await git.status(),
     cols: number = Number(await execShellCommand("tput cols"));
